@@ -52,21 +52,6 @@ def print_red(text):
     print("\033[91m" + text + "\033[0m")  
 
 
-def get_speed():
-    
-    s = speedtest.Speedtest(secure=True)
-    s.get_best_server()
-    s.upload()
-    results_dict = s.results.dict()
-    return results_dict['upload']
-
-def convert_speed():
-    n = get_speed()
-    bytes_ps = n / 8
-    mb_ps = bytes_ps / (1024 * 1024)
-    round_mb_ps = round(mb_ps, 2)
-    return round_mb_ps
-
 def upload_speed_test(file_size_kb=1024):
     
     file_size_bytes = file_size_kb * 1024
@@ -121,7 +106,6 @@ def download_speed_test(file_size_kb=1024):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Fragment Checker with Speed Tests')
-    parser.add_argument('--speedtest', action='store_true', help='Run Speedtest speed test')
     parser.add_argument('--download', action='store_true', help='Run cloudflare download test')
     parser.add_argument('--filesize', type=int, help='Specify the file size in MB for speed tests')
     parser.add_argument('--grpc', action='store_true', help='Run grpc config for test')
@@ -181,10 +165,7 @@ if __name__ == "__main__":
                     else:
                         print("Cloudflare Download speed test failed.")
                 
-                if args.speedtest:
-                    print("Performing Speedtest speed test...")
-                    print(f"Speedtest Result: {convert_speed()}")
-
+              
                 xray_thread.join(timeout=1)
 
     else:
@@ -217,8 +198,6 @@ if __name__ == "__main__":
                 else:
                     print("Cloudflare Download speed test failed.")
             
-            if args.speedtest:
-                print("Performing Speedtest speed test...")
-                print(f"Speedtest Result: {convert_speed()}")
+      
 
             xray_thread.join(timeout=1)
